@@ -21,3 +21,18 @@
 *.i*86
 *.x86_64
 *.hex
+
+# IDE files
+*.vcxproj*
+*.opensdf
+*.sdf
+*.sln
+Win32/
+ronnypix.dir/
+
+# CMake
+CMakeCache.txt
+CMakeFiles
+Makefile
+cmake_install.cmake
+install_manifest.txt
