@@ -50,12 +50,14 @@
 
 #include <stdint.h>
 
-struct RGB {
-	unsigned char red, green, blue;
-};
-typedef struct RGB color_t;
+typedef struct
+{
+	uint8_t r;
+	uint8_t g;
+	uint8_t b;
+	uint8_t a;
+} color_t;
 typedef color_t TPalette[256];
-typedef unsigned char TranslationTable[256];
 typedef struct
 {
 	uint16_t w;

@@ -19,19 +19,18 @@ void ReadPicsFile(const char *filename)
 		PicPaletted *pic = pics[i];
 		if (pic != NULL)
 		{
-			bmpfile_t *bmp = bmp_create(pic->w, pic->h, 8);
-			int j;
+			bmpfile_t *bmp = bmp_create(pic->w, pic->h, 32);
 			char outName[256];
-			for (j = 0; j < pic->w * pic->h; j++)
+			for (int j = 0; j < pic->w * pic->h; j++)
 			{
 				int x = j % pic->w;
 				int y = j / pic->w;
 				rgb_pixel_t pixel;
-				int paletteIndex = *((char *)&pic->data + j);
+				int paletteIndex = (int)pic->data[j];
 				int gamma = 4;
-				pixel.blue = (uint8_t)CLAMP(palette[paletteIndex].blue * gamma, 0, 255);
-				pixel.green = (uint8_t)CLAMP(palette[paletteIndex].green * gamma, 0, 255);
-				pixel.red = (uint8_t)CLAMP(palette[paletteIndex].red * gamma, 0, 255);
+				pixel.blue = (uint8_t)CLAMP(palette[paletteIndex].b * gamma, 0, 255);
+				pixel.green = (uint8_t)CLAMP(palette[paletteIndex].g * gamma, 0, 255);
+				pixel.red = (uint8_t)CLAMP(palette[paletteIndex].r * gamma, 0, 255);
 				pixel.alpha = 255;
 				bmp_set_pixel(bmp, x, y, pixel);
 			}

@@ -76,12 +76,42 @@ size_t f_read16(FILE *f, void *buf, size_t size)
 	_var = malloc(_size);\
 }
 
+// Some pics are palette swapped; use grey for them
+color_t cRangeGrey[] = {
+	{33, 33, 33, 255}, {28, 28, 28, 255}, {23, 23, 23, 255}, {18, 18, 18, 255},
+	{15, 15, 15, 255}, {12, 12, 12, 255}, {10, 10, 10, 255}, { 8, 8,  8, 255}
+};
+
+typedef struct
+{
+	uint8_t r, g, b;
+} PaletteColor;
+
+#define WALL_COLORS       208
+#define FLOOR_COLORS      216
+#define ROOM_COLORS       232
+#define ALT_COLORS        224
+static void SetGreyRange(int start, TPalette palette)
+{
+	for (int i = 0; i < 8; i++)
+	{
+		palette[start + i] = cRangeGrey[i];
+	}
+}
+static void SetPaletteGreyRanges(TPalette palette)
+{
+	SetGreyRange(WALL_COLORS, palette);
+	SetGreyRange(FLOOR_COLORS, palette);
+	SetGreyRange(ROOM_COLORS, palette);
+	SetGreyRange(ALT_COLORS, palette);
+}
+
 int ReadPics(
 	const char *filename, PicPaletted **pics, int maxPics, TPalette palette)
 {
 	FILE *f;
 	int is_eof = 0;
-	unsigned short int size;
+	uint16_t size;
 	int i = 0;
 
 	f = fopen(filename, "rb");
@@ -92,12 +122,22 @@ int ReadPics(
 			fclose(f);\
 			return 0;\
 		}
-		if (palette) {
-			elementsRead = fread(palette, sizeof(TPalette), 1, f);
+		for (i = 0; i < 256; i++)
+		{
+			PaletteColor pc;
+			elementsRead = fread(&pc, sizeof pc, 1, f);
 			CHECK_FREAD(1)
-		} else
-			fseek(f, sizeof(TPalette), SEEK_CUR);
+			if (palette)
+			{
+				palette[i].r = pc.r;
+				palette[i].g = pc.g;
+				palette[i].b = pc.b;
+				palette[i].a = 255;
+			}
+		}
+		SetPaletteGreyRanges(palette);
 
+		i = 0;
 		while (!is_eof)
 		{
 			elementsRead = fread(&size, sizeof(size), 1, f);
