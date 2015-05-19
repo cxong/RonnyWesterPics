@@ -10,13 +10,13 @@
 
 void ReadPicsFile(const char *filename)
 {
-	Pic **pics = calloc(9999, sizeof(Pic *));
+	PicPaletted **pics = calloc(9999, sizeof(PicPaletted *));
 	TPalette palette;
 	int i;
-	int picsRead = ReadPics(filename, pics, palette);
+	int picsRead = ReadPics(filename, pics, 9999, palette);
 	for (i = 0; i < picsRead; i++)
 	{
-		Pic *pic = pics[i];
+		PicPaletted *pic = pics[i];
 		if (pic != NULL)
 		{
 			bmpfile_t *bmp = bmp_create(pic->w, pic->h, 8);

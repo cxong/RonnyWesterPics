@@ -27,12 +27,15 @@
 *.opensdf
 *.sdf
 *.sln
+Debug/
 Win32/
 ronnypix.dir/
+ronnypix.xcodeproj/
 
 # CMake
 CMakeCache.txt
 CMakeFiles
+CMakeScripts/
 Makefile
 cmake_install.cmake
 install_manifest.txt

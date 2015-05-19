@@ -201,29 +201,6 @@ bmp_create_standard_color_table(bmpfile_t *bmp)
 }
 
 /**
- * Create grayscale color table for BMP object
- */
-static void
-bmp_create_grayscale_color_table(bmpfile_t *bmp)
-{
-  int i;
-  uint8_t step_size;
-
-  if (!bmp->colors) return;
-
-  if (bmp->dib.depth != 1)
-    step_size = 255 / (bmp->dib.ncolors - 1);
-  else
-    step_size = 255;
-
-  for (i = 0; i < bmp->dib.ncolors; ++i) {
-    uint8_t value = i * step_size;
-    rgb_pixel_t color = {value, value, value, 0};
-    bmp->colors[i] = color;
-  }
-}
-
-/**
  * Malloc the memory for color palette
  */
 static void

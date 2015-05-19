@@ -46,11 +46,9 @@
     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
     POSSIBILITY OF SUCH DAMAGE.
 */
-#ifndef __PIC_FILE
-#define __PIC_FILE
+#pragma once
 
-//#include "sys_specifics.h"
-
+#include <stdint.h>
 
 struct RGB {
 	unsigned char red, green, blue;
@@ -58,12 +56,12 @@ struct RGB {
 typedef struct RGB color_t;
 typedef color_t TPalette[256];
 typedef unsigned char TranslationTable[256];
-typedef struct _Pic {
-	short int w;
-	short int h;
-	char *data;
-} Pic;
+typedef struct
+{
+	uint16_t w;
+	uint16_t h;
+	unsigned char data[1];
+} PicPaletted;
 
-int ReadPics(const char *filename, void **pics, TPalette palette);
-
-#endif
+int ReadPics(
+	const char *filename, PicPaletted **pics, int maxPics, TPalette palette);

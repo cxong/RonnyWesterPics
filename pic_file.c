@@ -52,27 +52,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//#include "files.h"
-//#include "utils.h"
 
-#if !defined(ssize_t) && !defined(__MACTYPES__)
-typedef int ssize_t;
-#endif
-
-void swap16(uint16_t *bytes)
+void swap16 (void *d)
 {
 	return;
 }
-ssize_t f_read(FILE *f, void *buf, size_t size)
+size_t f_read(FILE *f, void *buf, size_t size)
 {
 	return fread(buf, size, 1, f);
 }
-ssize_t f_read16(FILE *f, void *buf, size_t size)
+size_t f_read16(FILE *f, void *buf, size_t size)
 {
-	ssize_t ret = 0;
-	if (buf) {
+	size_t ret = 0;
+	if (buf)
+	{
 		ret = f_read(f, buf, size);
-		swap16((short int*)buf);
+		swap16((int16_t *)buf);
 	}
 	return ret;
 }
@@ -81,7 +76,8 @@ ssize_t f_read16(FILE *f, void *buf, size_t size)
 	_var = malloc(_size);\
 }
 
-int ReadPics(const char *filename, void **pics, TPalette palette)
+int ReadPics(
+	const char *filename, PicPaletted **pics, int maxPics, TPalette palette)
 {
 	FILE *f;
 	int is_eof = 0;
@@ -112,7 +108,7 @@ int ReadPics(const char *filename, void **pics, TPalette palette)
 			swap16(&size);
 			if (size > 0)
 			{
-				Pic *p;
+				PicPaletted *p;
 				CMALLOC(p, size);
 
 				f_read16(f, &p->w, 2);
