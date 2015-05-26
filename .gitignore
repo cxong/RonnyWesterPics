@@ -29,6 +29,7 @@
 *.sln
 Debug/
 Win32/
+ronnypix.build/
 ronnypix.dir/
 ronnypix.xcodeproj/
 

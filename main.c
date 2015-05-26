@@ -8,12 +8,13 @@
 #define MIN(x, y) ((x) < (y) ? (x) : (y))
 #define CLAMP(v, _min, _max) MAX((_min), MIN((_max), (v)))
 
-void ReadPicsFile(const char *filename)
+TPalette palette;
+
+int ReadPicsFile(const char *filename, const bool hasPalette)
 {
 	PicPaletted **pics = calloc(9999, sizeof(PicPaletted *));
-	TPalette palette;
 	int i;
-	int picsRead = ReadPics(filename, pics, 9999, palette);
+	int picsRead = ReadPics(filename, pics, 9999, hasPalette ? &palette : NULL);
 	for (i = 0; i < picsRead; i++)
 	{
 		PicPaletted *pic = pics[i];
@@ -39,13 +40,17 @@ void ReadPicsFile(const char *filename)
 			bmp_destroy(bmp);
 		}
 	}
+	free(pics);
+	return picsRead;
 }
 
 int main(int argc, char *argv[])
 {
 	for (int i = 1; i < argc; i++)
 	{
-		ReadPicsFile(argv[i]);
+		printf("Reading %s...", argv[i]);
+		const int read = ReadPicsFile(argv[i], i == 1);
+		printf("read %d\n", read);
 	}
 	return 0;
 }

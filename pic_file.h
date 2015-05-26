@@ -66,4 +66,4 @@ typedef struct
 } PicPaletted;
 
 int ReadPics(
-	const char *filename, PicPaletted **pics, int maxPics, TPalette palette);
+	const char *filename, PicPaletted **pics, int maxPics, TPalette *palette);

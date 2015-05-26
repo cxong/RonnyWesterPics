@@ -76,11 +76,8 @@ size_t f_read16(FILE *f, void *buf, size_t size)
 	_var = malloc(_size);\
 }
 
-// Some pics are palette swapped; use grey for them
-color_t cRangeGrey[] = {
-	{33, 33, 33, 255}, {28, 28, 28, 255}, {23, 23, 23, 255}, {18, 18, 18, 255},
-	{15, 15, 15, 255}, {12, 12, 12, 255}, {10, 10, 10, 255}, { 8, 8,  8, 255}
-};
+// Some pics are palette swapped; use white for them
+static uint8_t cWhiteValues[] = { 64, 56, 46, 36, 30, 24, 20, 16 };
 
 typedef struct
 {
@@ -95,7 +92,10 @@ static void SetGreyRange(int start, TPalette palette)
 {
 	for (int i = 0; i < 8; i++)
 	{
-		palette[start + i] = cRangeGrey[i];
+		palette[start + i].r =
+		palette[start + i].g =
+		palette[start + i].b = cWhiteValues[i];
+		palette[start + i].a = 255;
 	}
 }
 static void SetPaletteGreyRanges(TPalette palette)
@@ -107,7 +107,7 @@ static void SetPaletteGreyRanges(TPalette palette)
 }
 
 int ReadPics(
-	const char *filename, PicPaletted **pics, int maxPics, TPalette palette)
+	const char *filename, PicPaletted **pics, int maxPics, TPalette *palette)
 {
 	FILE *f;
 	int is_eof = 0;
@@ -127,15 +127,15 @@ int ReadPics(
 			PaletteColor pc;
 			elementsRead = fread(&pc, sizeof pc, 1, f);
 			CHECK_FREAD(1)
-			if (palette)
+			if (palette != NULL && *palette)
 			{
-				palette[i].r = pc.r;
-				palette[i].g = pc.g;
-				palette[i].b = pc.b;
-				palette[i].a = 255;
+				(*palette)[i].r = pc.r;
+				(*palette)[i].g = pc.g;
+				(*palette)[i].b = pc.b;
+				(*palette)[i].a = 255;
 			}
 		}
-		SetPaletteGreyRanges(palette);
+		if (palette != NULL) SetPaletteGreyRanges(*palette);
 
 		i = 0;
 		while (!is_eof)
