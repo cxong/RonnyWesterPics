@@ -25,3 +25,8 @@ Known games and files that work:
 **Cyberdogs**
 
 - dogs.px
+
+**Magus**
+
+- magus.art
+- world.mgs (actually just a tileset file, no graphics data available, requires magus.art)
