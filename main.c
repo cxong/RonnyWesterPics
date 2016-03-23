@@ -22,15 +22,26 @@ static void PicPalettedToBMP(
 int ReadPicsFile(const char *filename, const bool hasPalette)
 {
 	PicPaletted **pics = calloc(9999, sizeof(PicPaletted *));
-	int i;
-	int picsRead = ReadPics(filename, pics, 9999, hasPalette ? &palette : NULL);
-	for (i = 0; i < picsRead; i++)
+	const int picsRead = ReadPics(filename, pics, 9999, hasPalette ? &palette : NULL);
+	// Create a picture containing the palette too
+	PicPaletted *palettePic = malloc(2 + 2 + 256);
+	palettePic->w = palettePic->h = 16;
+	for (int i = 0; i < 256; i++)
+	{
+		palettePic->data[i] = (unsigned char)i;
+	}
+	char buf[256];
+	sprintf(buf, "%s.palette", filename);
+	PicPalettedToBMP(palettePic, palette, buf, 0, 4);
+	free(palettePic);
+	for (int i = 0; i < picsRead; i++)
 	{
 		PicPaletted *pic = pics[i];
 		if (pic != NULL)
 		{
 			PicPalettedToBMP(pic, palette, filename, i, 4);
 		}
+		free(pic);
 	}
 	free(pics);
 	return picsRead;
