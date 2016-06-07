@@ -22,6 +22,10 @@ Known games and files that work:
 -  cdogs2.px
 -  font.px
 
+> :information_source: to convert the bitmaps into transparent RGB PNGs, use this imagemagick command:
+
+> `convert in.bmp -alpha on -transparent "rgb(0,60,80)" -type truecolormatte -define png:bit-depth=8 -define png:color-type=6 out.png`
+
 **Cyberdogs**
 
 - dogs.px
