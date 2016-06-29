@@ -88,7 +88,7 @@ typedef struct
 #define FLOOR_COLORS      216
 #define ROOM_COLORS       232
 #define ALT_COLORS        224
-static void SetGreyRange(int start, TPalette palette)
+static void SetGreyRange(const int start, TPalette palette)
 {
 	for (int i = 0; i < 8; i++)
 	{
@@ -98,12 +98,23 @@ static void SetGreyRange(int start, TPalette palette)
 		palette[start + i].a = 255;
 	}
 }
+static void SetRedRange(const int start, TPalette palette)
+{
+	for (int i = 0; i < 8; i++)
+	{
+		palette[start + i].r = cWhiteValues[i];
+		palette[start + i].g =
+		palette[start + i].b = 0;
+		palette[start + i].a = 255;
+	}
+}
 static void SetPaletteGreyRanges(TPalette palette)
 {
 	SetGreyRange(WALL_COLORS, palette);
 	SetGreyRange(FLOOR_COLORS, palette);
 	SetGreyRange(ROOM_COLORS, palette);
-	SetGreyRange(ALT_COLORS, palette);
+	// Set alt colours as red so they can be distinguished
+	SetRedRange(ALT_COLORS, palette);
 }
 
 int ReadPics(
