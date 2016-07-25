@@ -30,6 +30,10 @@ Known games and files that work:
 
 - dogs.px
 
+> :information_source: to convert the bitmaps into transparent RGB PNGs, use this imagemagick command:
+
+> `convert in.bmp -alpha on -transparent "rgb(60,0,60)" -type truecolormatte -define png:bit-depth=8 -define png:color-type=6 out.png`
+
 **Magus**
 
 - magus.art
