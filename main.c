@@ -10,7 +10,19 @@
 #define CLAMP(v, _min, _max) MAX((_min), MIN((_max), (v)))
 
 #ifndef strcasecmp
-#define strcasecmp stricmp
+#include <ctype.h>
+// https://stackoverflow.com/a/30734030/2038264
+int strcasecmp(const char *a, const char *b)
+{
+	int ca, cb;
+	do {
+		ca = (unsigned char) *a++;
+		cb = (unsigned char) *b++;
+		ca = tolower(toupper(ca));
+		cb = tolower(toupper(cb));
+	} while (ca == cb && ca != '\0');
+	return ca - cb;
+}
 #endif
 
 TPalette palette;

@@ -41,5 +41,9 @@ Makefile
 cmake_install.cmake
 install_manifest.txt
 
+# macos
+.DS_Store
+build/
+
 # Data files
 *.bmp
